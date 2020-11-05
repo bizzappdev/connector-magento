@@ -55,7 +55,6 @@ class MagentoStoreview(models.Model):
     catalog_price_tax_included = fields.Boolean(string='Prices include tax')
     is_multi_company = fields.Boolean(related="backend_id.is_multi_company")
 
-    @api.multi
     def import_sale_orders(self):
         import_start_time = datetime.now()
         for storeview in self:
@@ -71,9 +70,9 @@ class MagentoStoreview(models.Model):
 
             sale_binding_model = self.env['magento.sale.order']
             if user != self.env.user:
-                sale_binding_model = sale_binding_model.sudo(user)
+                sale_binding_model = sale_binding_model.with_user(user)
 
-            backend = storeview.sudo(user).backend_id
+            backend = storeview.with_user(user).backend_id
             if storeview.import_orders_from_date:
                 from_string = fields.Datetime.from_string
                 from_date = from_string(storeview.import_orders_from_date)
