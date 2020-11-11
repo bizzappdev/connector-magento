@@ -150,6 +150,7 @@ class MagentoImporter(AbstractComponent):
         # special check on data before import
         self._validate_data(data)
         model = self.model.with_context(connector_no_export=True)
+        print ("4444444$", data, model)
         binding = model.create(data)
         _logger.debug('%d created from magento %s', binding, self.external_id)
         return binding

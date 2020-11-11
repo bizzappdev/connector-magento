@@ -8,6 +8,8 @@ from odoo.addons.component.core import AbstractComponent, Component
 from odoo.addons.connector.exception import MappingError
 from odoo.addons.connector.components.mapper import mapping, only_create
 from ...components.mapper import normalize_datetime
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT as DATETIME_FORMAT
+from dateutil.parser import parse
 
 _logger = logging.getLogger(__name__)
 
@@ -45,7 +47,7 @@ class PartnerImportMapper(Component):
     direct = [
         ('email', 'email'),
         ('dob', 'birthday'),
-        (normalize_datetime('created_at'), 'created_at'),
+        #(normalize_datetime('created_at'), 'created_at'),
         (normalize_datetime('updated_at'), 'updated_at'),
         ('email', 'emailid'),
         ('taxvat', 'taxvat'),
@@ -58,7 +60,12 @@ class PartnerImportMapper(Component):
         # partners are companies so we can bind
         # addresses on them
         return {'is_company': True}
-
+    @mapping
+    def default_created_at(self, record):
+        #import pdb;pdb.set_trace()
+        if record.get('created_at'):
+            print ("aaaaaaaaaaaaaaaaaa44444444ddddddddddddddddddd44444$",parse(record['created_at']).strftime(DATETIME_FORMAT))
+            return {'created_at': parse(record['created_at']).strftime(DATETIME_FORMAT)}
     @mapping
     def names(self, record):
         """ Middlename not always present in Magento 2 """
@@ -433,7 +440,7 @@ class AddressImportMapper(Component):
     def direct(self):
         fields = super(AddressImportMapper, self).direct[:]
         fields += [
-            ('created_at', 'created_at'),
+            #('created_at', 'created_at'),
             ('updated_at', 'updated_at'),
             ('company', 'company'),
         ]
@@ -450,7 +457,12 @@ class AddressImportMapper(Component):
         return (
             record.get('default_shipping')  # Magento 2.x
             or record.get('is_default_shipping'))  # Magento 1.x
-
+    @mapping
+    def default_created_at(self, record):
+        #import pdb;pdb.set_trace()
+        if record.get('created_at'):
+            print ("44444444ddddddddddddddddddd44444$",parse(record['created_at']).strftime(DATETIME_FORMAT))
+            return {'created_at': parse(record['created_at']).strftime(DATETIME_FORMAT)}
     @mapping
     def default_billing(self, record):
         return {'is_default_billing': self.is_billing(record)}
