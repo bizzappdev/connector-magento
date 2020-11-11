@@ -64,7 +64,6 @@ class PartnerImportMapper(Component):
     def default_created_at(self, record):
         #import pdb;pdb.set_trace()
         if record.get('created_at'):
-            print ("aaaaaaaaaaaaaaaaaa44444444ddddddddddddddddddd44444$",parse(record['created_at']).strftime(DATETIME_FORMAT))
             return {'created_at': parse(record['created_at']).strftime(DATETIME_FORMAT)}
     @mapping
     def names(self, record):
@@ -461,7 +460,6 @@ class AddressImportMapper(Component):
     def default_created_at(self, record):
         #import pdb;pdb.set_trace()
         if record.get('created_at'):
-            print ("44444444ddddddddddddddddddd44444$",parse(record['created_at']).strftime(DATETIME_FORMAT))
             return {'created_at': parse(record['created_at']).strftime(DATETIME_FORMAT)}
     @mapping
     def default_billing(self, record):
